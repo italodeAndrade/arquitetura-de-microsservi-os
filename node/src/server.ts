@@ -5,6 +5,10 @@ import path from 'path';
 const app = express();
 const jwt_chave = 'seu_segredo_aqui';
 
+const PORT = 3000;
+
+app.use(express.static(path.join(__dirname, '../public')));
+
 interface autentica_req extends Request {
   usuario?: string|jwt.JwtPayload;
 }
@@ -26,6 +30,8 @@ const middleware_auth = (req: autentica_req, res: Response, next: NextFunction) 
   });
 };
 
-app.get('/', (req,res)=>{
-    res.sendFile(path.join(__dirname, './pages/log.html'));
-})
+
+app.listen(PORT, () => {
+  console.log(`navegador rodando: http://127.0.0.1:3000 `);
+  console.log(`servidor rodando: http://localhost:${PORT}`);
+});
