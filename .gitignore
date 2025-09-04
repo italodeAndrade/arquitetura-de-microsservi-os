@@ -1,5 +1,5 @@
 /python/.venv
-
+/python/db.py
 
 /node/package-lock.json
 /node/node_modules
