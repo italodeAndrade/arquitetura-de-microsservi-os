@@ -1,4 +1,5 @@
 import express, {Request ,Response ,NextFunction} from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 
@@ -30,6 +31,15 @@ const middleware_auth = (req: autentica_req, res: Response, next: NextFunction) 
   });
 };
 
+
+
+app.use('/logar', createProxyMiddleware({
+  target: 'http://servico-python:5000',
+  changeOrigin: true,
+  pathRewrite: {
+      '^/logar': '',
+  },
+}));
 
 app.listen(PORT, () => {
   console.log(`navegador rodando: http://127.0.0.1:3000 `);

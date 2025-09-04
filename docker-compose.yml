@@ -1,0 +1,32 @@
+
+version: '3.8'
+
+services:
+
+  servico-python:
+    # 'build' diz ao Compose para construir a imagem a partir do Dockerfile
+    # localizado dentro da pasta ./python.
+    build: ./python
+    # Dá um nome fixo e amigável ao container.
+    container_name: python-auth-api
+    # Mapeia a porta 5001 do seu computador para a porta 5000 do container.
+    ports:
+      - "5001:5000"
+    # 'environment' permite definir variáveis de ambiente dentro do container.
+    # Ótimo para gerenciar segredos.
+    environment:
+      - JWT_SECRET_KEY=minha-chave-super-secreta-12345
+
+
+  servico-node:
+    build: ./node
+    container_name: node-api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      # A MESMA chave secreta, para que o Node possa validar os tokens do Python.
+      - JWT_SECRET_KEY=minha-chave-super-secreta-12345
+    # 'depends_on' garante que o serviço Python seja iniciado ANTES do serviço Node.
+    # Isso evita erros caso o Gateway suba e tente se comunicar com a API antes dela estar pronta.
+    depends_on:
+      - servico-python
